@@ -3,20 +3,33 @@ from tkinter import messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
+
 def save_data():
+
     website = web_entry.get()
     email = email_entry.get()
     password = password_entry.get()
 
-    question = messagebox.askyesno("Message", "Do you want to proceed?")
-    if question is False:
-        exit()
-
-    with open("data.txt", "a") as file:
-        file.write(f"{website} | {email} | {password}\n")
-        web_entry.delete(0, END)
-        password_entry.delete(0, END)
-        messagebox.showinfo("Message", "Saved with success")
+    if len(website) == 0 or len(email) == 0 or len(password) == 0:
+        messagebox.showinfo("WARNING", f"Please don't leave any of the fields empty")
+        window.deiconify()
+    else:
+        question = messagebox.askokcancel("Message",
+                                          f"These are the details entered: \nWebsite: {website}\n"
+                                          f"Email: {email}\n"
+                                          f"Password: {password}\n"
+                                          f"Do you want to proceed?")
+        if question is True:
+            with open("data.txt", "a") as file:
+                file.write(f"{website} | {email} | {password}\n")
+                web_entry.delete(0, END)
+                password_entry.delete(0, END)
+                messagebox.showinfo("Message", "Saved with success")
+        else:
+            window.deiconify()
+            web_entry.delete(0, END)
+            password_entry.delete(0, END)
 
 
 
