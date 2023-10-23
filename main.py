@@ -1,8 +1,26 @@
 from tkinter import *
-
+from tkinter import messagebox
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+def save_data():
+    website = web_entry.get()
+    email = email_entry.get()
+    password = password_entry.get()
+
+    question = messagebox.askyesno("Message", "Do you want to proceed?")
+    if question is False:
+        exit()
+
+    with open("data.txt", "a") as file:
+        file.write(f"{website} | {email} | {password}\n")
+        web_entry.delete(0, END)
+        password_entry.delete(0, END)
+        messagebox.showinfo("Message", "Saved with success")
+
+
+
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -38,8 +56,8 @@ password_entry.grid(row=3, column=1)
 # Buttons
 gen_pass = Button(text="Generate Password", width=15)
 gen_pass.grid(row=3, column=2)
-add = Button(text="Add", width=46)
-add.grid(row=4, column=1, columnspan=2)
 
+add = Button(text="Add", width=46, command=save_data)
+add.grid(row=4, column=1, columnspan=2)
 
 window.mainloop()
