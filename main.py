@@ -1,15 +1,20 @@
+from random import randint, choice, shuffle
 from tkinter import *
 from tkinter import messagebox
-from random import randint, choice, shuffle
+
 import pyperclip
+import json
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 
 def password_generator():
-
     # Password Generator Project
 
-    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
@@ -29,33 +34,31 @@ def password_generator():
 
 
 def save_data():
-
     website = web_entry.get()
     email = email_entry.get()
     password = password_entry.get()
+    new_data = {website: {
+        "email": email,
+        "password": password,
+    }}
 
-    if len(website) == 0 or len(email) == 0 or len(password) == 0:
+    if len(website) == 0 or len(password) == 0:
         messagebox.showinfo("WARNING", f"Please don't leave any of the fields empty")
-        window.deiconify()
     else:
-        question = messagebox.askokcancel("Message",
-                                          f"These are the details entered: \nWebsite: {website}\n"
-                                          f"Email: {email}\n"
-                                          f"Password: {password}\n"
-                                          f"Do you want to proceed?")
-        if question is True:
-            with open("data.txt", "a") as file:
-                file.write(f"{website} | {email} | {password}\n")
-                web_entry.delete(0, END)
-                password_entry.delete(0, END)
-                messagebox.showinfo("Message", "Saved with success")
+        try:
+            with open("data.json", "r") as file:
+                # Read data
+                data = json.load(file)
+                data.update(new_data)
+        except:
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
         else:
-            window.deiconify()
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
+        finally:
             web_entry.delete(0, END)
             password_entry.delete(0, END)
-
-
-
 
 
 # ---------------------------- UI SETUP ------------------------------- #
